@@ -2,9 +2,7 @@
 Using both Kaldi (Automatic Speech Recognition) and Gentle (Forced Word Aligner), the words of a spoken poem are matched with audio and used to find poetic devices such as alliteration and rhyme. This is made possible because Gentle's force aligner returns not only the times at which each word is spoken but also the phonetic pronunciation of each word. These phones are then able to be used to find patterns of oral speech in media files, such as the oration of the Night Before Christmas (uploaded as an example in the repository). 
 
 ## Install 
-```
-This repository is dependent on both [Kaldi](https://github.com/kaldi-asr/kaldi) and [Gentle](https://github.com/lowerquality/gentle).  
-```
+This repository is dependent on both [Kaldi](https://github.com/kaldi-asr/kaldi) and [Gentle](https://github.com/lowerquality/gentle). Simple install the Gentle repository, which contains a script to install Kaldi, and then place this cloned repository into the Gentle folder.  
 
 ## Command Line Interface
 ```
