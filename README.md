@@ -6,7 +6,6 @@ This repository is dependent on both [Kaldi](https://github.com/kaldi-asr/kaldi)
 
 ## Command Line Interface
 ```
-python poetic_detection.py -h
 usage: poetic_detection.py [-h] -a AUDIO -t TEXT [-r] [-al]
 
 Get poetic devices, such as rhyme and alliteration, from a given audio file
@@ -25,5 +24,5 @@ optional arguments:
                         audio and transcript files
 ```
 
-## Getting a Phonetic Pronunciation
-In order to align the words in a media file and obtain a pronunciation of them, both an audio file and transcript must be supplied.
+## Usage
+In order to align the words in a media file and obtain a pronunciation of them, both an audio file and transcript must be supplied. Throughout the README, I will be using Clement Moore's Night Before Christmas (A visit from St. Nicholas) as an example and both the accompanying text file and audio file can be found in the data folder of this repository. However, any audio file with clearly spoken and matching text can be used (American accents tend to work better than British and others).
