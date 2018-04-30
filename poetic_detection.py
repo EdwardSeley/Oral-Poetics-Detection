@@ -33,7 +33,7 @@ def get_rhymes(words):
             if abs(pair[1] - pair[0]) < 15:
                 if last_syllables[pair[1]] != 'oov':
                     if words[pair[0]].word.lower() not in set(stopwords.words('english')) and words[pair[1]].word.lower() not in set(stopwords.words('english')):
-                        rhymes.append( ( (words[pair[0]].word, words[pair[0]].phones), (words[pair[1]].word, words[pair[1]].phones) ) )
+                        rhymes.append( ( (words[pair[0]].word, ''.join(words[pair[0]].phones)), (words[pair[1]].word, ''.join(words[pair[1]].phones))) )
     return rhymes
 
 '''
@@ -101,8 +101,7 @@ def get_transcribed_words(textFile, audioFile):
 def main():
 
     parser = argparse.ArgumentParser(
-            description='Using both Kaldi (Automatic Speech Recognition) and Gentle (Forced Word Aligner), \
-            the words of a spoken poem are matched with audio and used to find poetic devices such as alliteration and rhyme.')
+            description='Get poetic devices, such as rhyme and alliteration, from a given audio file and text file.')
 
     parser.add_argument(
             '-a',
