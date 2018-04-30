@@ -68,5 +68,10 @@ After these lines (and the accompanying audio) are given to the script, the foll
 ['dhah', 'wehstern', 'weyv', 'wahz', 'aol', 'ah', 'fleym', 'dhah', 'dey', 'wahz', 'wehl', 'nay', 'dahn', 'aolmowst', 'ahpaan', 'dhah', 'wehstern', 'weyv', 'rehstihd', 'dhah', 'braod', 'brayt', 'sahn', 'wehn', 'dhaet', 'streynjh', 'sheyp', 'drowv', 'sahdahnliy', 'oov', 'ahs', 'ahnd', 'dhah', 'sahn']
 ```
 
-The first phone is then pulled from each word and compared to all of first phones of words nearby (3 words apart). All of these combinations are then brought together into a set of shared alliterations and added to the list.
+The first phone is then pulled from each word and compared to all of first phones of words nearby (3 words apart). All of these combinations are then brought together into a set of shared alliterations and added to the list:
+
+```
+[(('was', 'wahz'), ('well', 'wehl'), ('wave', 'weyv'), ('western', 'wehstern')), (('bright', 'brayt'), ('broad', 'braod')), (('us', 'ahs'), ('and', 'ahnd'))]
+
+```
 
