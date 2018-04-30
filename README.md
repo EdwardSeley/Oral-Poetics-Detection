@@ -39,7 +39,7 @@ This script is built on top of Gentle, and thus uses Gentle's forced aligner to 
 > And mamma in her 'kerchief, and I in my cap,
 > Had just settled our brains for a long winter's nap.
 
-Once fed to the poetic detection script, these lines become:
+Once fed to the poetic detection script (which sends it to the forced aligner), these lines become:
 
 ```
 ['oov', 'dhah', 'nayt', 'bihfaor', 'krihsmahs', 'wehn', 'aol', 'thruw', 'dhiy', 'hhaws', 'naat', 'ah', 'kriycher', 'wahz', 'sterihng', 'naat', 'ah', 'maws', 'dhah', 'staakihngz', 'wer', 'hhahng', 'bay', 'dhah', 'chihmniy', 'wihth', 'kehr', 'ihn', 'hhowps', 'dhaht', 'seynt', 'nihkahlahs', 'suwn', 'wuhd', 'biy', 'dhehr', 'dhah', 'chihldrahn', 'wer', 'nehsahld', 'aol', 'snahg', 'ihn', 'dhehr', 'behdz', 'wayl', 'vihzhahnz', 'ahv', 'shuhger', 'plahmz', 'daenst', 'ihn', 'dhehr', 'hhehdz', 'ahnd', 'maamah', 'ihn', 'hher', 'oov', 'aend', 'ay', 'ihn', 'may', 'kaep', 'hhaed', 'jhihst', 'sehtahld', 'aar', 'breynz', 'fer', 'ah', 'laong', 'wihnterz', 'naep']
@@ -51,3 +51,22 @@ The rhyme detection algorithm works by finding the last syllable of each word an
 (('heads', 'hhehdz'), ('beds', 'behdz')), 
 (('nap', 'naep'), ('cap', 'kaep'))]
 ```
+
+## Detecting Alliterations
+The algorithm for finding alliterations is very similar to that for finding rhymes. But instead of comparing the last syllable of nearby words, we are finding the first phone of each word that is in a very close proximity. Just as before, the first step is getting the phones for each spoken word in the text. I'll be using a verse from The Rime of the Ancient Mariner for this example:
+
+> The western wave was all a flame.
+> The day was well nigh done!
+> Almost upon the western wave
+> Rested the broad bright Sun;
+> When that strange shape drove suddenly
+> Betwixt us and the Sun. 
+
+After these lines (and the accompanying audio) are given to the script, the following phones are gathered:
+
+```
+['dhah', 'wehstern', 'weyv', 'wahz', 'aol', 'ah', 'fleym', 'dhah', 'dey', 'wahz', 'wehl', 'nay', 'dahn', 'aolmowst', 'ahpaan', 'dhah', 'wehstern', 'weyv', 'rehstihd', 'dhah', 'braod', 'brayt', 'sahn', 'wehn', 'dhaet', 'streynjh', 'sheyp', 'drowv', 'sahdahnliy', 'oov', 'ahs', 'ahnd', 'dhah', 'sahn']
+```
+
+The first phone is then pulled from each word and compared to all of first phones of words nearby (3 words apart). All of these combinations are then brought together into a set of shared alliterations and added to the list.
+
