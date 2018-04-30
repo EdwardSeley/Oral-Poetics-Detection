@@ -32,9 +32,48 @@ def get_rhymes(words):
         for pair in list(itertools.combinations(sequence, 2)):
             if abs(pair[1] - pair[0]) < 15:
                 if last_syllables[pair[1]] != 'oov':
-                    if words[pair[0]].word.lower() not in set(stopwords.words('english')) and words[pair[1]].word.lower() not in set(stopwords.words('english')):
-                        rhymes.append( ( (words[pair[0]].word, ''.join(words[pair[0]].phones)), (words[pair[1]].word, ''.join(words[pair[1]].phones))) )
+                    if words[pair[0]].word.lower() != words[pair[1]].word.lower():
+                        if words[pair[0]].word.lower() not in set(stopwords.words('english')) and words[pair[1]].word.lower() not in set(stopwords.words('english')):
+                            rhymes.append( ( (words[pair[0]].word, ''.join(words[pair[0]].phones)), (words[pair[1]].word, ''.join(words[pair[1]].phones))) )
     return rhymes
+
+'''
+In a very similar manner as to how rhymes were collected, the first phone of
+each word was extracted and compared to each other based on proximity.
+'''
+def get_alliterations(words):
+    first_phones = []
+    for word in words:
+        phone = get_first_phone(word)
+        first_phones.append(phone)
+    alliterations = []
+    for sequence in matching_occurrences(first_phones):
+        for pair in list(itertools.combinations(sequence, 2)):
+            if abs(pair[1] - pair[0]) < 3:
+                if first_phones[pair[1]] != 'oov':
+                    alliterations.append( ( (words[pair[0]].word, ''.join(words[pair[0]].phones)), (words[pair[1]].word, ''.join(words[pair[1]].phones))) )
+
+    return pairs_to_tuples(alliterations)
+
+'''
+From the list of tuple pairs, a set is created and the intersections of all the
+pairs are gathered and placed into a more flexible tuple 
+'''
+def pairs_to_tuples(sequence):
+    set_of_sets = set([frozenset(element) for element in sequence])
+    result = []
+    while(set_of_sets):
+        new_set = set(set_of_sets.pop())
+        check = len(set_of_sets)
+        while check:
+            check = False
+            for element in set_of_sets.copy():
+                if new_set.intersection(element):
+                    check = True
+                    set_of_sets.remove(element)
+                    new_set.update(element)
+        result.append(tuple(new_set))
+    return result
 
 '''
 Gets the last syllable of the word by finding the last vowel
@@ -47,6 +86,12 @@ def get_last_syllable(word):
             last_syllable = ""
         last_syllable += phone
     return last_syllable
+
+'''
+Simply returns the first phone of the word given
+'''
+def get_first_phone(word):
+    return word.phones[0]
 
 '''
 Finds all equivalent elements in a sequences and returns their matching_indices
@@ -135,10 +180,18 @@ def main():
 
     args = parser.parse_args()
 
-    transcribed_words = get_transcribed_words(os.getcwd() + args.text, os.getcwd() + args.audio)
+    #transcribed_words = get_transcribed_words(os.getcwd() + args.text, os.getcwd() + args.audio)
+
+    #with open('transcription.pkl', 'wb') as output:
+        #pickle.dump(transcribed_words, output, pickle.HIGHEST_PROTOCOL)
+
+    with open('transcription.pkl', 'rb') as input:
+        transcribed_words = pickle.load(input)
 
     if args.rhyme:
         print(get_rhymes(transcribed_words))
+    if args.alliteration:
+        print(get_alliterations(transcribed_words))
 
 if __name__ == '__main__':
     main()
