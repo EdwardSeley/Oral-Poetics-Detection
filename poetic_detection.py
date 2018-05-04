@@ -10,6 +10,8 @@ import nltk
 from nltk.corpus import stopwords
 import itertools
 import argparse
+import subprocess
+import json
 
 VOWELS = ['ay', 'ao', 'ih', 'ah', 'eh', 'uw', 'aw', 'aa', 'ae', 'iy', 'er', 'aw', 'eh', 'ow', 'ey', 'uw', 'uh']
 
@@ -57,7 +59,7 @@ def get_alliterations(words):
 
 '''
 From the list of tuple pairs, a set is created and the intersections of all the
-pairs are gathered and placed into a more flexible tuple 
+pairs are gathered and placed into a more flexible tuple
 '''
 def pairs_to_tuples(sequence):
     set_of_sets = set([frozenset(element) for element in sequence])
@@ -163,35 +165,27 @@ def main():
             required=True)
 
     parser.add_argument(
-            '-r',
-            '--rhyme',
-            help="Retrieves all of the rhyming pairs found in the audio and transcript files",
-            required=False,
-            action='store_true'
-    )
-
-    parser.add_argument(
-            '-al',
-            '--alliteration',
-            help="Retrieves all of cases of alliteration found in the audio and transcript files",
-            required=False,
-            action='store_true'
-    )
+            '-o',
+            '--output',
+            type=str,
+            help='Stores the results of the poetic device detection in a JSON file',
+            )
 
     args = parser.parse_args()
 
-    #transcribed_words = get_transcribed_words(os.getcwd() + args.text, os.getcwd() + args.audio)
+    transcribed_words = get_transcribed_words(args.text, args.audio)
 
-    #with open('transcription.pkl', 'wb') as output:
-        #pickle.dump(transcribed_words, output, pickle.HIGHEST_PROTOCOL)
 
-    with open('transcription.pkl', 'rb') as input:
-        transcribed_words = pickle.load(input)
+    devices = {}
+    devices["Rhymes"] = get_rhymes(transcribed_words)
+    devices["Alliteration"] = get_alliterations(transcribed_words)
+    print(devices)
 
-    if args.rhyme:
-        print(get_rhymes(transcribed_words))
-    if args.alliteration:
-        print(get_alliterations(transcribed_words))
+    if args.output:
+        js = json.dumps(devices)
+        output_file = open(args.output, 'w')
+        output_file.write(js)
+        output_file.close()
 
 if __name__ == '__main__':
     main()
